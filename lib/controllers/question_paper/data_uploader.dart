@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_study_app/models/question_paper_model.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DataUploader extends GetxController {
   @override
@@ -12,6 +13,7 @@ class DataUploader extends GetxController {
   }
 
   Future<void> uploadData() async {
+    final fireStore = FirebaseFirestore.instance;
     final manifestContent = await DefaultAssetBundle.of(Get.context!)
         .loadString("AssetManifest.json");
     final Map<String, dynamic> manifestMap = json.decode(manifestContent);
@@ -27,5 +29,6 @@ class DataUploader extends GetxController {
           .add(QuestionPaperModel.fromJson(json.decode(stringPaperContent)));
     }
     // print('Items number ${questionPapers[0].description}');
+    var batch = fireStore.batch();
   }
 }
